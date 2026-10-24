@@ -113,6 +113,9 @@ Inspect the saved PNGs before calling the boot successful. Gamepad enumeration
 and binding do not establish physical button/axis or rumble behavior. Results
 from the separate Libretro core require their own frontend tests.
 
+The initial build and OutRun 2 title-screen result, with its limits, are recorded
+in [Local Validation](docs/VALIDATION.md).
+
 ## Local Storage And Publication
 
 All source checkouts, dependencies, build products, app bundles, configurations,

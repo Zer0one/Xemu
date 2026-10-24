@@ -14,6 +14,23 @@ spec.loader.exec_module(toolkit)
 
 
 class ToolkitGuards(unittest.TestCase):
+    def test_packaging_failure_preserves_the_previous_app(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            local = Path(temporary)
+            source = local / "sources/michaeljsr"
+            built = source / "dist/xemu.app/Contents/MacOS/xemu"
+            built.parent.mkdir(parents=True)
+            built.write_bytes(b"new app")
+            with patch.object(toolkit, "LOCAL", local):
+                previous = toolkit.app_path("michaeljsr") / "Contents/MacOS/xemu"
+                previous.parent.mkdir(parents=True)
+                previous.write_bytes(b"working app")
+                with patch.object(toolkit, "prepare_app", side_effect=RuntimeError("signing failed")):
+                    with self.assertRaisesRegex(RuntimeError, "signing failed"):
+                        toolkit.adopt("michaeljsr", source, "revision", local / "build.log")
+                self.assertEqual(previous.read_bytes(), b"working app")
+                self.assertFalse((local / "selected.json").exists())
+
     def test_setup_preserves_an_existing_different_remote(self):
         existing = subprocess.CompletedProcess([], 0, "https://example.invalid/other.git\n")
         with patch.object(toolkit.subprocess, "run", return_value=existing), patch.object(toolkit, "run") as run:
