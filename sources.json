@@ -1,0 +1,5 @@
+{
+  "official": {"url": "https://github.com/xemu-project/xemu.git", "branch": "master"},
+  "michaeljsr": {"url": "https://github.com/MichaelJSr/xemu-macos.git", "branch": "master"},
+  "cosmicsnow": {"url": "https://github.com/CosmicSnow/xemu-for-macos.git", "branch": "master"}
+}
